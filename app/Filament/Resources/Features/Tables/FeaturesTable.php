@@ -9,15 +9,14 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class FeaturesTable
-{
-    public static function configure(Table $table): Table
-    {
+class FeaturesTable {
+    public static function configure(Table $table): Table {
         return $table
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('status')
+                    ->badge()
                     ->searchable(),
                 TextColumn::make('type')
                     ->searchable(),

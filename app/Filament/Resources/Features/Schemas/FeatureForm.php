@@ -2,22 +2,27 @@
 
 namespace App\Filament\Resources\Features\Schemas;
 
+use App\Enums\Feature\FeatureStatus;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 
-class FeatureForm
-{
-    public static function configure(Schema $schema): Schema
-    {
+class FeatureForm {
+    public static function configure(Schema $schema): Schema {
         return $schema
             ->components([
                 TextInput::make('name')
                     ->required(),
-                TextInput::make('status')
+                Select::make('status')
                     ->required()
-                    ->default('Proposed'),
+                    ->enum(FeatureStatus::class)
+                    ->searchable()
+                    ->default(FeatureStatus::Proposed->value),
+                // TextInput::make('status')
+                //     ->required()
+                //     ->default('Proposed'),
                 TextInput::make('type')
                     ->required()
                     ->default('Feature'),
