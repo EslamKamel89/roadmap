@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\EditProfile;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -28,8 +29,20 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandLogo('/images/roadmap-light.png')
+            ->darkModeBrandLogo('/images/roadmap-dark.png')
+            ->unsavedChangesAlerts()
+            ->databaseTransactions()
+            // ->registration()
+            // ->passwordReset()
+            // ->emailVerification()
+            // ->emailChangeVerification()
+            ->profile(EditProfile::class, isSimple: false)
+            // ->topNavigation()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::convertToOklch('#4397cb'),
+                'gray' => Color::Slate,
+                'info' => Color::Violet,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -38,8 +51,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+                // AccountWidget::class,
+                // FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -54,6 +67,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->sidebarCollapsibleOnDesktop()
+            ->sidebarWidth('fit-content')
+            ->spa();
     }
 }

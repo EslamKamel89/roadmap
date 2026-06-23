@@ -19,7 +19,7 @@ use Filament\Tables\Table;
 class FeatureResource extends Resource {
     protected static ?string $model = Feature::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Tag;
 
     protected static ?string $recordTitleAttribute = 'name';
 
