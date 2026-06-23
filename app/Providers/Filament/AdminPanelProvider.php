@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo('/images/roadmap-light.png')
             ->darkModeBrandLogo('/images/roadmap-dark.png')
             ->strictAuthorization()
-            ->unsavedChangesAlerts()
+            // ->unsavedChangesAlerts()
             ->databaseTransactions()
             // ->registration()
             // ->passwordReset()

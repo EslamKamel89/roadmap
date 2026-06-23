@@ -6,6 +6,7 @@ use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Field;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -114,6 +115,16 @@ class FilamentUiServiceProvider extends ServiceProvider
                 ->defaultDateDisplayFormat('m/d/Y')
                 ->defaultDateTimeDisplayFormat('h:i A')
                 ->defaultTimeDisplayFormat('m/d/Y h:i A');
+        });
+        RichEditor::configureUsing(function (RichEditor $editor) {
+            $editor->toolbarButtons([
+                ['bold', 'italic', 'underline', 'strike', 'link'],
+                ['h2', 'h3'],
+                ['alignStart', 'alignCenter', 'alignEnd'],
+                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                ['undo', 'redo'],
+            ])
+                ->columnSpanFull();
         });
     }
 }
