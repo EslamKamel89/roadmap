@@ -12,8 +12,10 @@ use Filament\Forms\Components\Slider\Enums\PipsMode;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Validation\Rule;
 
@@ -23,49 +25,67 @@ class FeatureForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->required(),
-                ToggleButtons::make('type')
-                    ->required()
-                    ->enum(FeatureType::class)
-                    ->default(FeatureType::Feature->value)
-                    ->inline(),
+                Tabs::make('Feature Tab')
+                    ->vertical()
+                    ->tabs([
+                        Tab::make('Feature Details')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->required()
+                                    ->columnSpanFull(),
+                                Select::make('status')
+                                    ->required()
+                                    ->enum(FeatureStatus::class)
+                                    ->options(FeatureStatus::class)
+                                    ->searchable()
+                                    ->default(FeatureStatus::Proposed->value),
+                                ToggleButtons::make('type')
+                                    ->hiddenLabel()
+                                    ->required()
+                                    ->enum(FeatureType::class)
+                                    ->default(FeatureType::Feature->value)
+                                    ->inline()
+                                    ->extraFieldWrapperAttributes([
+                                        'class' => 'pt-7',
+                                    ]),
 
-                Select::make('status')
-                    ->required()
-                    // ->live()
-                    ->enum(FeatureStatus::class)
-                    ->options(FeatureStatus::class)
-                    ->searchable()
-                    ->default(FeatureStatus::Proposed->value),
-
-                DatePicker::make('target_delivery_date')
-                    ->rules([
-                        function (Get $get) {
-                            return Rule::requiredIf(
-                                $get('status') === FeatureStatus::Planned || $get('status') === FeatureStatus::InProgress
-                            );
-                        },
-                    ])
-                    ->visibleJs(<<<'JS'
+                                DatePicker::make('target_delivery_date')
+                                    ->rules([
+                                        function (Get $get) {
+                                            return Rule::requiredIf(
+                                                $get('status') === FeatureStatus::Planned || $get('status') === FeatureStatus::InProgress
+                                            );
+                                        },
+                                    ])
+                                    ->visibleJs(<<<'JS'
                         $get('status') === 'Planned' || $get('status') === 'In Progress'
-
                     JS),
 
-                RichEditor::make('description'),
-                TextInput::make('effort_in_days')
-                    ->required()
-                    // ->live(debounce: 500)
-                    // ->afterStateUpdated(function ($state, Get $get, Set $set) {
-                    //     $effort = (int) $state;
-                    //     $isHightCost = $get('is_high_cost');
-                    //     if ($isHightCost) {
-                    //         $set('cost', $effort * 1500);
-                    //     } else {
-                    //         $set('cost', $effort * 1000);
-                    //     }
-                    // })
-                    ->afterStateUpdatedJs(<<<'JS'
+                                DatePicker::make('delivered_at')
+                                    ->visibleJs(<<<'JS'
+                            $get('status') === 'Completed'
+                        JS),
+                                Slider::make('priority')
+                                    ->live(debounce: '900')
+                                    ->label(fn (Get $get) => 'Priority ('.$get('priority').')')
+                                    ->required()
+                                    ->step(1)
+                                    ->pips(PipsMode::Steps)
+                                    ->minValue(1)
+                                    ->maxValue(10)
+                                    ->fillTrack()
+                                    ->default(1)
+                                    ->columnSpanFull(),
+                                RichEditor::make('description')
+                                    ->extraInputAttributes([
+                                        'class' => 'min-h-[200px]',
+                                    ]),
+                            ]),
+                        Tab::make('Effort and Cost')
+                            ->schema([
+                                TextInput::make('effort_in_days')
+                                    ->required()
+                                    ->afterStateUpdatedJs(<<<'JS'
                         const isHighCost = $get('is_high_cost');
                         if(isHighCost){
                             $set('cost' , $state * 1500);
@@ -73,35 +93,11 @@ class FeatureForm
                             $set('cost' , $state * 1000);
                         }
                     JS)
-                    ->numeric()
-                    ->default(0),
-                Slider::make('priority')
-                    ->live(debounce: '900')
-                    ->label(fn (Get $get) => 'Priority ('.$get('priority').')')
-                    ->required()
-                    ->step(1)
-                    ->pips(PipsMode::Steps)
-                    ->minValue(1)
-                    ->maxValue(10)
-                    ->fillTrack()
-                    ->default(1),
-                TextInput::make('cost')
-                    ->required()
-                    ->numeric()
-                    ->default(0)
-                    ->prefix('$'),
-                Toggle::make('is_high_cost')
-                    // ->live()
-                    // ->afterStateUpdated(function ($state, Get $get, Set $set) {
-                    //     $effort = (int) $get('effort_in_days');
-                    //     if ($state) {
-                    //         $set('cost', $effort * 1500);
-                    //     } else {
-                    //         $set('cost', $effort * 1000);
-                    //     }
-                    // })
-                    ->dehydrated(false)
-                    ->afterStateUpdatedJs(<<<'JS'
+                                    ->numeric()
+                                    ->default(0),
+                                Toggle::make('is_high_cost')
+                                    ->dehydrated(false)
+                                    ->afterStateUpdatedJs(<<<'JS'
                     const isHighCost = $state ;
                     const effort = $get('effort_in_days');
                     if(isHighCost){
@@ -110,8 +106,25 @@ class FeatureForm
                         $set('cost' , effort * 1000);
                     }
                     JS)
-                    ->default(false),
-                DatePicker::make('delivered_at'),
+                                    ->extraFieldWrapperAttributes([
+                                        'class' => 'p-7',
+                                    ])
+                                    ->default(false),
+                                TextInput::make('cost')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->prefix('$'),
+                            ]),
+                    ])
+                    ->columnSpanFull()->columns(2),
+                // Section::make('Feature Details')
+                //     ->schema()->columnSpanFull()->columns(2),
+
+                // Section::make('Effort and Cost')->schema([
+
+                // ])->ColumnSpanFull()->columns(2),
+
             ]);
     }
 }

@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
             ->brandLogo('/images/roadmap-light.png')
             ->darkModeBrandLogo('/images/roadmap-dark.png')
