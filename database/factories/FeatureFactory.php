@@ -3,19 +3,22 @@
 namespace Database\Factories;
 
 use App\Enums\Feature\FeatureStatus;
+use App\Enums\Feature\FeatureType;
 use App\Models\Feature;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Feature>
  */
-class FeatureFactory extends Factory {
+class FeatureFactory extends Factory
+{
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    public function definition(): array {
+    public function definition(): array
+    {
         return [
             'name' => $this->faker->sentence(),
 
@@ -24,7 +27,7 @@ class FeatureFactory extends Factory {
             ),
 
             'type' => $this->faker->randomElement(
-                array: ['Feature', 'Bugfix', 'Integration']
+                array: FeatureType::cases()
             ),
 
             'description' => $this->faker->paragraph(),

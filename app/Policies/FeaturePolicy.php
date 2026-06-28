@@ -22,6 +22,11 @@ class FeaturePolicy
         return true;
     }
 
+    public function delete()
+    {
+        return true;
+    }
+
     public function deleteAny()
     {
         return true;

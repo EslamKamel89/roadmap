@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Illuminate\Validation\Rule;
 
 class FeatureForm
 {
@@ -22,18 +23,32 @@ class FeatureForm
             ->components([
                 TextInput::make('name')
                     ->required(),
-                Select::make('status')
-                    ->required()
-                    ->enum(FeatureStatus::class)
-                    ->searchable()
-                    ->default(FeatureStatus::Proposed->value),
-
                 ToggleButtons::make('type')
                     ->required()
                     ->enum(FeatureType::class)
                     ->default(FeatureType::Feature->value)
-                    ->hiddenLabel()
                     ->inline(),
+
+                Select::make('status')
+                    ->required()
+                    // ->live()
+                    ->enum(FeatureStatus::class)
+                    ->options(FeatureStatus::class)
+                    ->searchable()
+                    ->default(FeatureStatus::Proposed->value),
+
+                DatePicker::make('target_delivery_date')
+                    ->rules([
+                        function (Get $get) {
+                            return Rule::requiredIf(
+                                $get('status') === FeatureStatus::Planned || $get('status') === FeatureStatus::InProgress
+                            );
+                        },
+                    ])
+                    ->visibleJs(<<<'JS'
+                        $get('status') === 'Planned' || $get('status') === 'In Progress'
+
+                    JS),
 
                 RichEditor::make('description'),
                 TextInput::make('effort_in_days')
@@ -55,7 +70,6 @@ class FeatureForm
                     ->numeric()
                     ->default(0)
                     ->prefix('$'),
-                DatePicker::make('target_delivery_date'),
                 DatePicker::make('delivered_at'),
             ]);
     }
