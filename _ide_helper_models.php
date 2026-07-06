@@ -15,14 +15,15 @@ namespace App\Models{
 /**
  * @property int $id
  * @property string $name
- * @property string $status
- * @property string $type
+ * @property \App\Enums\Feature\FeatureStatus $status
+ * @property \App\Enums\Feature\FeatureType $type
  * @property string|null $description
+ * @property array<array-key, mixed>|null $milestones
  * @property int $effort_in_days
  * @property int $priority
  * @property numeric $cost
- * @property string|null $target_delivery_date
- * @property string|null $delivered_at
+ * @property \Illuminate\Support\Carbon|null $target_delivery_date
+ * @property \Illuminate\Support\Carbon|null $delivered_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\FeatureFactory factory($count = null, $state = [])
@@ -35,6 +36,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereEffortInDays($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereMilestones($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature wherePriority($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereStatus($value)
@@ -43,6 +45,16 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature whereUpdatedAt($value)
  */
 	class Feature extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @method static \Database\Factories\StageFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage query()
+ */
+	class Stage extends \Eloquent {}
 }
 
 namespace App\Models{

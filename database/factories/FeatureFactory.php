@@ -32,6 +32,8 @@ class FeatureFactory extends Factory
 
             'description' => $this->faker->paragraph(),
 
+            'milestones' => null,
+
             'effort_in_days' => $this->faker->numberBetween(
                 int1: 1,
                 int2: 300

@@ -16,36 +16,42 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class FeatureResource extends Resource {
+class FeatureResource extends Resource
+{
     protected static ?string $model = Feature::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Tag;
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Schema $schema): Schema {
+    public static function form(Schema $schema): Schema
+    {
         return FeatureForm::configure($schema);
     }
 
-    public static function infolist(Schema $schema): Schema {
+    public static function infolist(Schema $schema): Schema
+    {
         return FeatureInfolist::configure($schema);
     }
 
-    public static function table(Table $table): Table {
+    public static function table(Table $table): Table
+    {
         return FeaturesTable::configure($table);
     }
 
-    public static function getRelations(): array {
+    public static function getRelations(): array
+    {
         return [
             //
         ];
     }
 
-    public static function getPages(): array {
+    public static function getPages(): array
+    {
         return [
             'index' => ListFeatures::route('/'),
             'create' => CreateFeature::route('/create'),
-            // 'view' => ViewFeature::route('/{record}'),
+            'view' => ViewFeature::route('/{record}'),
             'edit' => EditFeature::route('/{record}/edit'),
         ];
     }

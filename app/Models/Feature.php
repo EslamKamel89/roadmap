@@ -8,8 +8,9 @@ use Database\Factories\FeatureFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['name', 'status', 'type', 'description', 'effort_in_days', 'priority', 'cost', 'target_delivery_date', 'delivered_at'])]
+#[Fillable(['name', 'status', 'type', 'description', 'milestones', 'effort_in_days', 'priority', 'cost', 'target_delivery_date', 'delivered_at'])]
 class Feature extends Model
 {
     /** @use HasFactory<FeatureFactory> */
@@ -22,6 +23,12 @@ class Feature extends Model
             'type' => FeatureType::class,
             'target_delivery_date' => 'date',
             'delivered_at' => 'date',
+            'milestones' => 'array',
         ];
+    }
+
+    public function stages(): HasMany
+    {
+        return $this->hasMany(Stage::class);
     }
 }
