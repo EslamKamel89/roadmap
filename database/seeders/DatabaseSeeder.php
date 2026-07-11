@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
+            'is_admin' => true,
         ]);
         Feature::factory(50)->create();
     }

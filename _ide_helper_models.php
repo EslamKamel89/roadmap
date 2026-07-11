@@ -13,6 +13,16 @@
 
 namespace App\Models{
 /**
+ * @method static \Database\Factories\CommentFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment query()
+ */
+	class Comment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * @property int $id
  * @property string $name
  * @property \App\Enums\Feature\FeatureStatus $status
@@ -26,6 +36,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $delivered_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Stage> $stages
+ * @property-read int|null $stages_count
  * @method static \Database\Factories\FeatureFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Feature newQuery()
@@ -49,10 +61,25 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * @property int $id
+ * @property int $feature_id
+ * @property string $title
+ * @property \Illuminate\Support\Carbon $due_date
+ * @property bool $is_completed
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Feature $feature
  * @method static \Database\Factories\StageFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage whereDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage whereFeatureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage whereIsCompleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Stage whereUpdatedAt($value)
  */
 	class Stage extends \Eloquent {}
 }
@@ -83,5 +110,15 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  */
 	class User extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @method static \Database\Factories\VoteFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Vote newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Vote newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Vote query()
+ */
+	class Vote extends \Eloquent {}
 }
 

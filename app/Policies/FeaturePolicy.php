@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Models\User;
+
 class FeaturePolicy
 {
     /**
@@ -12,9 +14,9 @@ class FeaturePolicy
         //
     }
 
-    public function update()
+    public function update(?User $user)
     {
-        return true;
+        return $user->is_admin;
     }
 
     public function viewAny()
@@ -22,14 +24,14 @@ class FeaturePolicy
         return true;
     }
 
-    public function delete()
+    public function delete(?User $user)
     {
-        return true;
+        return $user->is_admin;
     }
 
-    public function deleteAny()
+    public function deleteAny(?User $user)
     {
-        return true;
+        return $user->is_admin;
     }
 
     public function view()
@@ -37,8 +39,8 @@ class FeaturePolicy
         return true;
     }
 
-    public function create()
+    public function create(?User $user)
     {
-        return true;
+        return $user->is_admin;
     }
 }
