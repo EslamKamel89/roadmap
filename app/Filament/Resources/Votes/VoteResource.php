@@ -20,9 +20,11 @@ class VoteResource extends Resource
 {
     protected static ?string $model = Vote::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHandThumbUp;
 
     protected static ?string $recordTitleAttribute = 'id';
+
+    protected static ?int $navigationSort = 30;
 
     public static function form(Schema $schema): Schema
     {

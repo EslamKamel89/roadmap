@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Votes\Tables;
 
+use App\Filament\Resources\Features\RelationManagers\VotesRelationManager;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -18,6 +19,7 @@ class VotesTable
                 TextColumn::make('user.name')
                     ->searchable(),
                 TextColumn::make('feature.name')
+                    ->hiddenOn([VotesRelationManager::class])
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

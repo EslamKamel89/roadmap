@@ -6,6 +6,8 @@ use App\Filament\Resources\Features\Pages\CreateFeature;
 use App\Filament\Resources\Features\Pages\EditFeature;
 use App\Filament\Resources\Features\Pages\ListFeatures;
 use App\Filament\Resources\Features\Pages\ViewFeature;
+use App\Filament\Resources\Features\RelationManagers\CommentsRelationManager;
+use App\Filament\Resources\Features\RelationManagers\VotesRelationManager;
 use App\Filament\Resources\Features\Schemas\FeatureForm;
 use App\Filament\Resources\Features\Schemas\FeatureInfolist;
 use App\Filament\Resources\Features\Tables\FeaturesTable;
@@ -23,6 +25,8 @@ class FeatureResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Tag;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?int $navigationSort = 10;
 
     public static function form(Schema $schema): Schema
     {
@@ -42,7 +46,8 @@ class FeatureResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CommentsRelationManager::class,
+            VotesRelationManager::class,
         ];
     }
 

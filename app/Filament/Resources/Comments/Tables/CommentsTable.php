@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Comments\Tables;
 
+use App\Filament\Resources\Features\RelationManagers\CommentsRelationManager;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -19,8 +20,11 @@ class CommentsTable
                 TextColumn::make('user.name')
                     ->searchable(),
                 TextColumn::make('feature.name')
+                    ->hiddenOn([CommentsRelationManager::class])
                     ->searchable(),
+                TextColumn::make('body')->limit(50)->searchable(),
                 IconColumn::make('is_approved')
+                    ->label('Approved')
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
