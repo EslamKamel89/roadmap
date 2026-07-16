@@ -1,15 +1,43 @@
 <?php
 
 use App\Models\Feature;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Concerns\RestrictsFileUploadsToSchemaComponents;
+use Filament\Schemas\Contracts\HasSchemas;
+use Filament\Schemas\Schema;
 use Livewire\Component;
 
-new class extends Component
+new class extends Component implements HasSchemas
 {
+    use InteractsWithSchemas;
+    use RestrictsFileUploadsToSchemaComponents;
+
+    public ?array $data = [];
+
     public Feature $feature;
 
     public function mount(Feature $feature)
     {
         $this->feature = $feature;
+        $this->form->fill();
+    }
+
+    // without adding this method the line ` $this->form->fill()` throws an error
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                // TextInput::make('title')
+                //     ->required(),
+                // MarkdownEditor::make('content'),
+                // ...
+            ])
+            ->statePath('data');
+    }
+
+    public function create(): void
+    {
+        dd($this->form->getState());
     }
 };
 ?>
