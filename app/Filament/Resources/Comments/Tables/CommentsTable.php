@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Comments\Tables;
 
 use App\Filament\Resources\Features\RelationManagers\CommentsRelationManager;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -37,6 +38,9 @@ class CommentsTable
             ])
             ->filters([
                 //
+            ])
+            ->emptyStateActions([
+                CreateAction::make(),
             ])
             ->recordActions([
                 ViewAction::make(),

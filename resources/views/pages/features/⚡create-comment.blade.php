@@ -6,6 +6,7 @@ use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Concerns\RestrictsFileUploadsToSchemaComponents;
 use Filament\Schemas\Contracts\HasSchemas;
@@ -34,9 +35,12 @@ new class extends Component implements HasSchemas
         return $schema
             ->components([
                 Textarea::make('body')
-                    ->rows(3)
+                    ->label('Comment')
                     ->placeholder('Add your comment')
-                    ->hiddenLabel()
+                    ->helperText('Maximum 1000 chars')
+                    ->rows(3)
+                    ->maxLength(1000)
+                    ->live(debounce: 900)
                     ->required(),
             ])
             ->statePath('data');
@@ -44,9 +48,7 @@ new class extends Component implements HasSchemas
 
     public function commentsInfoList(Schema $schema)
     {
-        return $schema->state([
-            'comments' => $this->feature->comments,
-        ])->components([
+        return $schema->record($this->feature)->components([
             RepeatableEntry::make('comments')
                 ->table([
                     TableColumn::make('User name'),
@@ -73,7 +75,17 @@ new class extends Component implements HasSchemas
 
     public function create(): void
     {
-        dd($this->form->getState());
+        $data = $this->form->getState();
+        $this->feature->comments()->create([
+            'body' => $data['body'],
+            'user_id' => auth()->id(),
+        ]);
+        $this->form->fill();
+        $this->feature->load('comments.user');
+        Notification::make()
+            ->title('Comment is submitted successfully')
+            ->success()
+            ->send();
     }
 };
 ?>
@@ -112,7 +124,6 @@ new class extends Component implements HasSchemas
         <form wire:submit="create" class="space-y-6">
 
             {{ $this->form }}
-
             <div class="flex justify-end">
                 <button type="submit"
                     class="rounded-lg bg-blue-600 px-5 py-2.5 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
